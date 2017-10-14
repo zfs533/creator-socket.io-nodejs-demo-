@@ -1,3 +1,4 @@
+//socket.io net class
 var Message = cc.Class(
 {
     ctor:function()
@@ -5,33 +6,23 @@ var Message = cc.Class(
         this.initProperty();
         this.registerMsg();
     },
+    //init socket.io
     initProperty:function()
     {
-        //127.0.0.1
+        //127.0.0.1 connect local server by port 1314
+        //192.168.51.159 is local ip
         this.socket = io.connect("192.168.51.159:1314");//port 自定义
-        this.msgStr = [];
-        for(let i = 0; i<10; i++)
-        {
-            var msg = {msg:"info0"+i,data:"message_"+i};
-            this.msgStr.push(msg);
-        }
-        this.list = [];
     },
+    //use HellowWorld script
     setParentt:function(parentt)
     {
         this.parentt = parentt;
     },
+    //register(recieve) message , server send to client
     registerMsg:function()
     {
-        for(let i = 0; i<this.msgStr.length;i++)
-        {
-            this.socket.on(this.msgStr[i].msg,function(msg)
-            {
-                this.parentt.recieveMsg(msg);
-            }.bind(this));
-        }
         this.socket.on("connected",function(msg){
-            cc.log("---------------connected server");
+            cc.log("---------------connected server---------------");
         });
         this.socket.on('insert',function(msg)
         {
@@ -54,12 +45,6 @@ var Message = cc.Class(
             this.parentt.recieveList(msg);
         }.bind(this));
     },
-    sendMsg:function(parentt)
-    {
-        this.parentt = parentt;
-        let msg = this.msgStr[Math.floor(Math.random()*this.msgStr.length)];
-        this.socket.emit(msg.msg,msg.data);
-    }
 });
 var msg = msg || new Message();
 module.exports = msg;

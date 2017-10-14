@@ -2,21 +2,8 @@ var express = require("express");
 var app = express();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
-//----------------数据库sql----------------//
-function callback(info)
-{
-	console.log("callback____: "+info);
-}
-var SqlData = require('./database');
-SqlData.route.setCallback(callback);
-//----------------绑定的msg----------------//
-var msgStr = [];
-for(let i = 0; i<10; i++)
-{
-    var msg = {msg:"info0"+i,data:"message_"+i};
-    msgStr.push(msg);
-}
-//--------------------------------------//
+//----------------database sql----------------//
+var SqlData = require('./database');//应用相同目录下的.js文件内容
 //client connection
 io.on("connection",function(socket)
 {
@@ -28,14 +15,6 @@ io.on("connection",function(socket)
 	{
 		console.log("disconnect");
 	});
-
-	for(let i = 0; i<msgStr.length;i++)
-    {
-        socket.on(msgStr[i].msg,function(msg)
-        {
-            socket.emit(msgStr[i].msg,msg);
-        });
-    }
     socket.on('insert',function()
 	{
 		console.log("insertdata");
@@ -75,7 +54,7 @@ io.on("connection",function(socket)
 		});
 	});
 });
-
+//start server
 http.listen(1314,function()
 {
 	console.log("server start port : 1314");

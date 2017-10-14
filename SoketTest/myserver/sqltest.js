@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
  
 connection.connect();
 
-var sql = "SELECT * FROM runoob_tbl";
+var sql = "SELECT * FROM user_test";
 //results is list for database and that item type is {}(object)
 connection.query(sql, function (error, results) {
   	if (error) throw error;
